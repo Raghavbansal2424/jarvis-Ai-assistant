@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JARVIS Advanced AI System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Audiowide&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --neon-blue: #00fff7;
+            --neon-cyan: #00d4ff;
+            --neon-purple: #b300ff;
+            --neon-pink: #ff00e5;
+            --dark-bg: #000000;
+            --darker-bg: #0a0a0a;
+            --panel-bg: rgba(0, 255, 247, 0.03);
+            --text-glow: #ffffff;
+            --success: #00ff41;
+            --warning: #ffcc00;
+            --danger: #ff0055;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-glow);
+            overflow: hidden;
+            height: 100vh;
+            position: relative;
+        }
+
+        /* Advanced animated background */
+        .cyber-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(0, 255, 247, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(179, 0, 255, 0.05) 0%, transparent 50%);
+            z-index: 0;
+        }
+
+        .grid-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 200%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 247, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 247, 0.1) 1px, transparent 1px);
+            background-size: 40px 40px;
+            animation: gridScroll 20s linear infinite;
+            transform: perspective(500px) rotateX(60deg);
+            transform-origin: center center;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes gridScroll {
+            0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
+            100% { transform: perspective(500px) rotateX(60deg) translateY(40px); }
+        }
+
+        /* Scanning effect */
+        .scan-line {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+            box-shadow: 0 0 20px var(--neon-cyan);
+            animation: scan 4s linear infinite;
+            z-index: 999;
+            pointer-events: none;
+        }
+
+        @keyframes scan {
+            0% { top: 0; opacity: 0; }
+            50% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+
+        /* Holographic particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--neon-cyan);
+            border-radius: 50%;
+            animation: float-particle 10s infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes float-particle {
+            0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-100vh) translateX(50px); }
+        }
+
+        /* Main container */
+        .jarvis-container {
+            position: relative;
+            z-index: 2;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+            overflow: hidden;
+        }
+
+        /* Top HUD */
+        .top-hud {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            padding: 20px;
+            border: 1px solid rgba(0, 255, 247, 0.3);
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            margin-bottom: 15px;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .system-status {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 15px;
+            background: rgba(0, 255, 247, 0.1);
+            border: 1px solid rgba(0, 255, 247, 0.3);
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+            box-shadow: 0 0 10px var(--success);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+        }
+
+        .jarvis-logo {
+            text-align: center;
+        }
+
+        .logo-text {
+            font-family: 'Audiowide', cursive;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-purple), var(--neon-pink));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(0, 255, 247, 0.5);
+            letter-spacing: 10px;
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { filter: brightness(1) drop-shadow(0 0 20px var(--neon-cyan)); }
+            50% { filter: brightness(1.2) drop-shadow(0 0 40px var(--neon-purple)); }
+        }
+
+        .system-info {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+        }
+
+        .info-panel {
+            padding: 8px 15px;
+            background: rgba(179, 0, 255, 0.1);
+            border: 1px solid rgba(179, 0, 255, 0.3);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* Main interface */
+        .main-interface {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 300px 1fr 300px;
+            gap: 15px;
+            overflow: hidden;
+        }
+
+        /* Side panels */
+        .side-panel {
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(0, 255, 247, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            overflow-y: auto;
+            backdrop-filter: blur(10px);
+            animation: slideIn 0.8s ease-out;
+        }
+
+        .side-panel.left { animation-delay: 0.2s; }
+        .side-panel.right { animation-delay: 0.4s; }
+
+        @keyframes slideIn {
+            from { transform: translateX(-50px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .panel-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            color: var(--neon-cyan);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(0, 255, 247, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Command buttons */
+        .command-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        .command-btn {
+            padding: 12px;
+            background: rgba(0, 255, 247, 0.05);
+            border: 1px solid rgba(0, 255, 247, 0.4);
+            border-radius: 8px;
+            color: var(--neon-cyan);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .command-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 247, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .command-btn:hover::before {
+            left: 100%;
+        }
+
+        .command-btn:hover {
+            background: rgba(0, 255, 247, 0.15);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 20px rgba(0, 255, 247, 0.3);
+            transform: translateX(5px);
+        }
+
+        .command-btn:active {
+            transform: scale(0.95);
+        }
+
+        .command-icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        /* Center panel - Chat */
+        .center-panel {
+            display: flex;
+            flex-direction: column;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(0, 255, 247, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.8s ease-out 0.3s both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* AI Core Visualization */
+        .ai-core {
+            padding: 30px;
+            text-align: center;
+            border-bottom: 1px solid rgba(0, 255, 247, 0.3);
+            position: relative;
+        }
+
+        .core-orb {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--neon-cyan), var(--neon-purple));
+            position: relative;
+            animation: coreRotate 10s linear infinite;
+            box-shadow: 
+                0 0 40px var(--neon-cyan),
+                0 0 80px var(--neon-purple),
+                inset 0 0 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .core-orb::before {
+            content: '';
+            position: absolute;
+            top: 10%;
+            left: 10%;
+            right: 10%;
+            bottom: 10%;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            animation: coreRotate 5s linear infinite reverse;
+        }
+
+        .core-orb::after {
+            content: '';
+            position: absolute;
+            top: 20%;
+            left: 20%;
+            right: 20%;
+            bottom: 20%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.8), transparent);
+            animation: corePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes coreRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes corePulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        .core-status {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            color: var(--neon-cyan);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        /* Chat area */
+        .chat-display {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .chat-message {
+            margin-bottom: 20px;
+            animation: messageAppear 0.3s ease-out;
+        }
+
+        @keyframes messageAppear {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .message-user {
+            text-align: right;
+        }
+
+        .message-assistant {
+            text-align: left;
+        }
+
+        .message-bubble {
+            display: inline-block;
+            padding: 15px 20px;
+            border-radius: 15px;
+            max-width: 70%;
+            position: relative;
+        }
+
+        .message-user .message-bubble {
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+            color: #000;
+            font-weight: 600;
+            box-shadow: 0 4px 20px rgba(0, 255, 247, 0.4);
+        }
+
+        .message-assistant .message-bubble {
+            background: rgba(0, 255, 247, 0.1);
+            border: 1px solid rgba(0, 255, 247, 0.4);
+            color: var(--text-glow);
+        }
+
+        .message-time {
+            font-size: 0.75rem;
+            opacity: 0.6;
+            margin-top: 5px;
+        }
+
+        /* Input area */
+        .input-area {
+            padding: 20px;
+            border-top: 1px solid rgba(0, 255, 247, 0.3);
+            background: rgba(0, 255, 247, 0.02);
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .voice-visualizer {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+        }
+
+        .voice-bar {
+            width: 3px;
+            height: 20px;
+            background: var(--neon-cyan);
+            border-radius: 2px;
+            animation: voiceWave 0.8s ease-in-out infinite;
+        }
+
+        .voice-bar:nth-child(2) { animation-delay: 0.1s; }
+        .voice-bar:nth-child(3) { animation-delay: 0.2s; }
+        .voice-bar:nth-child(4) { animation-delay: 0.3s; }
+        .voice-bar:nth-child(5) { animation-delay: 0.2s; }
+        .voice-bar:nth-child(6) { animation-delay: 0.1s; }
+
+        @keyframes voiceWave {
+            0%, 100% { height: 10px; }
+            50% { height: 30px; }
+        }
+
+        .voice-visualizer.active .voice-bar {
+            background: var(--neon-pink);
+            box-shadow: 0 0 10px var(--neon-pink);
+        }
+
+        .input-box {
+            flex: 1;
+            background: rgba(0, 255, 247, 0.05);
+            border: 1px solid rgba(0, 255, 247, 0.3);
+            border-radius: 25px;
+            padding: 15px 25px;
+            color: var(--text-glow);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .input-box:focus {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 20px rgba(0, 255, 247, 0.3);
+            background: rgba(0, 255, 247, 0.08);
+        }
+
+        .input-box::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .control-btn {
+            width: 50px;
+            height: 50px;
+            border: none;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+            color: #000;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(0, 255, 247, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .control-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .control-btn:hover::before {
+            width: 100px;
+            height: 100px;
+        }
+
+        .control-btn:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 6px 30px rgba(0, 255, 247, 0.6);
+        }
+
+        .control-btn:active {
+            transform: scale(0.95);
+        }
+
+        .control-btn.recording {
+            animation: recordPulse 1s infinite;
+        }
+
+        @keyframes recordPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 0, 85, 0.7); }
+            50% { box-shadow: 0 0 0 20px rgba(255, 0, 85, 0); }
+        }
+
+        /* System controls */
+        .system-controls {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .sys-btn {
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 255, 247, 0.3);
+            border-radius: 8px;
+            color: var(--neon-cyan);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .sys-btn:hover {
+            background: rgba(0, 255, 247, 0.1);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 15px rgba(0, 255, 247, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .sys-btn.danger {
+            border-color: rgba(255, 0, 85, 0.5);
+            color: var(--danger);
+        }
+
+        .sys-btn.danger:hover {
+            background: rgba(255, 0, 85, 0.1);
+            border-color: var(--danger);
+            box-shadow: 0 0 15px rgba(255, 0, 85, 0.3);
+        }
+
+        /* Music player */
+        .music-player {
+            background: rgba(179, 0, 255, 0.05);
+            border: 1px solid rgba(179, 0, 255, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .music-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .music-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(179, 0, 255, 0.2);
+            border: 1px solid var(--neon-purple);
+            color: var(--neon-purple);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .music-btn:hover {
+            background: var(--neon-purple);
+            color: #000;
+            box-shadow: 0 0 15px var(--neon-purple);
+        }
+
+        .track-info {
+            text-align: center;
+            margin-top: 10px;
+            color: var(--neon-purple);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-interface {
+                grid-template-columns: 1fr;
+            }
+
+            .side-panel {
+                display: none;
+            }
+
+            .top-hud {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .system-status,
+            .system-info {
+                justify-content: center;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 255, 247, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 255, 247, 0.3);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 255, 247, 0.5);
+        }
+
+        /* Loading animation */
+        .thinking {
+            display: inline-flex;
+            gap: 5px;
+            align-items: center;
+        }
+
+        .thinking-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--neon-cyan);
+            animation: thinking 1.4s infinite ease-in-out both;
+        }
+
+        .thinking-dot:nth-child(1) { animation-delay: -0.32s; }
+        .thinking-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes thinking {
+            0%, 80%, 100% { transform: scale(0); opacity: 0.5; }
+            40% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Modal for notifications */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid var(--neon-cyan);
+            border-radius: 8px;
+            color: var(--neon-cyan);
+            box-shadow: 0 0 20px rgba(0, 255, 247, 0.4);
+            animation: slideInRight 0.3s ease-out;
+            z-index: 1000;
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(400px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .offline-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(255, 204, 0, 0.2);
+            border: 1px solid var(--warning);
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: var(--warning);
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated background -->
+    <div class="cyber-background"></div>
+    <div class="grid-layer"></div>
+    <div class="scan-line"></div>
+    <div class="particles" id="particles"></div>
+
+    <!-- Main container -->
+    <div class="jarvis-container">
+        <!-- Top HUD -->
+        <div class="top-hud">
+            <div class="system-status">
+                <div class="status-indicator">
+                    <div class="status-dot"></div>
+                    <span id="mainStatus">SYSTEMS ONLINE</span>
+                    <span class="offline-badge" id="offlineBadge" style="display: none;">OFFLINE MODE</span>
+                </div>
+            </div>
+            
+            <div class="jarvis-logo">
+                <div class="logo-text">JARVIS</div>
+                <div class="core-status">ADVANCED AI SYSTEM</div>
+            </div>
+            
+            <div class="system-info">
+                <div class="info-panel" id="timeDisplay">00:00:00</div>
+                <div class="info-panel" id="dateDisplay">LOADING...</div>
+            </div>
+        </div>
+
+        <!-- Main interface -->
+        <div class="main-interface">
+            <!-- Left panel - Quick commands -->
+            <div class="side-panel left">
+                <div class="panel-title">⚡ QUICK COMMANDS</div>
+                <div class="command-grid">
+                    <button class="command-btn" onclick="jarvis.executeCommand('time')">
+                        <span class="command-icon">🕐</span> Current Time
+                    </button>
+                    <button class="command-btn" onclick="jarvis.executeCommand('date')">
+                        <span class="command-icon">📅</span> Today's Date
+                    </button>
+                    <button class="command-btn" onclick="jarvis.executeCommand('weather')">
+                        <span class="command-icon">🌤️</span> Weather
+                    </button>
+                    <button class="command-btn" onclick="jarvis.executeCommand('search google')">
+                        <span class="command-icon">🔍</span> Google Search
+                    </button>
+                    <button class="command-btn" onclick="jarvis.executeCommand('play music')">
+                        <span class="command-icon">🎵</span> Play Music
+                    </button>
+                    <button class="command-btn" onclick="jarvis.executeCommand('youtube')">
+                        <span class="command-icon">📺</span> Open YouTube
+                    </button>
+                    <button class="command-btn" onclick="jarvis.executeCommand('calculator')">
+                        <span class="command-icon">🔢</span> Calculator
+                    </button>
+                    <button class="command-btn" onclick="jarvis.executeCommand('notepad')">
+                        <span class="command-icon">📝</span> Notes
+                    </button>
+                </div>
+
+                <div class="panel-title" style="margin-top: 30px;">🎵 MUSIC PLAYER</div>
+                <div class="music-player">
+                    <div class="track-info" id="trackInfo">No track playing</div>
+                    <div class="music-controls">
+                        <button class="music-btn" onclick="jarvis.musicControl('prev')">⏮️</button>
+                        <button class="music-btn" onclick="jarvis.musicControl('play')" id="playBtn">▶️</button>
+                        <button class="music-btn" onclick="jarvis.musicControl('next')">⏭️</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Center panel - AI interaction -->
+            <div class="center-panel">
+                <div class="ai-core">
+                    <div class="core-orb"></div>
+                    <div class="core-status" id="aiStatus">AI CORE ACTIVE</div>
+                </div>
+
+                <div class="chat-display" id="chatDisplay">
+                    <div class="chat-message message-assistant">
+                        <div class="message-bubble">
+                            Welcome! JARVIS Advanced AI System is now online. I can control your system, play music, open applications, and assist you with any task. Voice commands are active. How may I assist you?
+                        </div>
+                        <div class="message-time">SYSTEM INITIALIZED</div>
+                    </div>
+                </div>
+
+                <div class="input-area">
+                    <div class="voice-visualizer" id="voiceVisualizer">
+                        <div class="voice-bar"></div>
+                        <div class="voice-bar"></div>
+                        <div class="voice-bar"></div>
+                        <div class="voice-bar"></div>
+                        <div class="voice-bar"></div>
+                        <div class="voice-bar"></div>
+                    </div>
+                    
+                    <input 
+                        type="text" 
+                        class="input-box" 
+                        id="commandInput" 
+                        placeholder="Speak or type your command..."
+                        autocomplete="off"
+                    >
+                    
+                    <button class="control-btn" id="voiceBtn" onclick="jarvis.toggleVoice()">
+                        🎤
+                    </button>
+                    
+                    <button class="control-btn" id="sendBtn" onclick="jarvis.sendMessage()">
+                        ➤
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right panel - System controls -->
+            <div class="side-panel right">
+                <div class="panel-title">⚙️ SYSTEM CONTROL</div>
+                <div class="system-controls">
+                    <button class="sys-btn" onclick="jarvis.systemControl('lock')">
+                        🔒 Lock Screen
+                    </button>
+                    <button class="sys-btn" onclick="jarvis.systemControl('sleep')">
+                        💤 Sleep
+                    </button>
+                    <button class="sys-btn danger" onclick="jarvis.systemControl('restart')">
+                        🔄 Restart
+                    </button>
+                    <button class="sys-btn danger" onclick="jarvis.systemControl('shutdown')">
+                        ⚡ Shutdown
+                    </button>
+                </div>
+
+                <div class="panel-title" style="margin-top: 30px;">🚀 APPLICATIONS</div>
+                <div class="command-grid">
+                    <button class="command-btn" onclick="jarvis.openApp('chrome')">
+                        <span class="command-icon">🌐</span> Chrome
+                    </button>
+                    <button class="command-btn" onclick="jarvis.openApp('spotify')">
+                        <span class="command-icon">🎵</span> Spotify
+                    </button>
+                    <button class="command-btn" onclick="jarvis.openApp('vscode')">
+                        <span class="command-icon">💻</span> VS Code
+                    </button>
+                    <button class="command-btn" onclick="jarvis.openApp('explorer')">
+                        <span class="command-icon">📁</span> File Explorer
+                    </button>
+                    <button class="command-btn" onclick="jarvis.openApp('terminal')">
+                        <span class="command-icon">⌨️</span> Terminal
+                    </button>
+                    <button class="command-btn" onclick="jarvis.openApp('settings')">
+                        <span class="command-icon">⚙️</span> Settings
+                    </button>
+                </div>
+
+                <div class="panel-title" style="margin-top: 30px;">📊 STATUS</div>
+                <div class="status-indicator" style="width: 100%; justify-content: space-between;">
+                    <span>Voice: </span>
+                    <span id="voiceStatus" style="color: var(--success);">ACTIVE</span>
+                </div>
+                <div class="status-indicator" style="width: 100%; justify-content: space-between; margin-top: 10px;">
+                    <span>Mode: </span>
+                    <span id="modeStatus">ONLINE</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Generate particles
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 10 + 's';
+            particle.style.animationDuration = (5 + Math.random() * 10) + 's';
+            particlesContainer.appendChild(particle);
+        }
+
+        // Advanced JARVIS AI System
+        class JarvisAdvanced {
+            constructor() {
+                this.isListening = false;
+                this.recognition = null;
+                this.synthesis = window.speechSynthesis;
+                this.isOnline = navigator.onLine;
+                this.musicPlaying = false;
+                this.currentTrack = null;
+                
+                // Offline AI brain
+                this.offlineResponses = {
+                    greetings: ['Hello! How can I assist you?', 'Good day! JARVIS at your service.', 'Greetings! What can I do for you?'],
+                    time: ['current time query'],
+                    date: ['current date query'],
+                    calculate: ['calculation query'],
+                    music: ['music control'],
+                    app: ['application launch'],
+                    system: ['system control'],
+                    search: ['web search'],
+                    help: ['I can help you with: system controls, opening applications, playing music, calculations, time and date, web searches, and general questions.'],
+                    default: ['I understand. What would you like me to do?', 'Processing your request.', 'How else can I assist you?']
+                };
+
+                this.init();
+            }
+
+            init() {
+                this.setupVoiceRecognition();
+                this.setupEventListeners();
+                this.updateTime();
+                this.checkOnlineStatus();
+                this.speak('JARVIS Advanced AI System initialized. All systems operational.');
+                
+                setInterval(() => this.updateTime(), 1000);
+                setInterval(() => this.checkOnlineStatus(), 5000);
+            }
+
+            setupEventListeners() {
+                const input = document.getElementById('commandInput');
+                input.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.sendMessage();
+                });
+
+                window.addEventListener('online', () => this.updateOnlineStatus(true));
+                window.addEventListener('offline', () => this.updateOnlineStatus(false));
+            }
+
+            setupVoiceRecognition() {
+                if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                    this.recognition = new SpeechRecognition();
+                    this.recognition.continuous = false;
+                    this.recognition.interimResults = false;
+                    this.recognition.lang = 'en-US';
+
+                    this.recognition.onstart = () => {
+                        this.isListening = true;
+                        document.getElementById('voiceBtn').classList.add('recording');
+                        document.getElementById('voiceVisualizer').classList.add('active');
+                        document.getElementById('aiStatus').textContent = 'LISTENING...';
+                    };
+
+                    this.recognition.onresult = (event) => {
+                        const transcript = event.results[0][0].transcript;
+                        document.getElementById('commandInput').value = transcript;
+                        this.sendMessage();
+                    };
+
+                    this.recognition.onerror = (event) => {
+                        console.error('Speech recognition error:', event.error);
+                        this.stopListening();
+                    };
+
+                    this.recognition.onend = () => {
+                        this.stopListening();
+                    };
+
+                    document.getElementById('voiceStatus').textContent = 'ACTIVE';
+                } else {
+                    document.getElementById('voiceStatus').textContent = 'NOT SUPPORTED';
+                    document.getElementById('voiceStatus').style.color = 'var(--danger)';
+                }
+            }
+
+            toggleVoice() {
+                if (this.isListening) {
+                    this.stopListening();
+                } else {
+                    this.startListening();
+                }
+            }
+
+            startListening() {
+                if (this.recognition) {
+                    this.recognition.start();
+                } else {
+                    this.notify('Voice recognition not supported in this browser', 'warning');
+                }
+            }
+
+            stopListening() {
+                if (this.recognition) {
+                    this.isListening = false;
+                    document.getElementById('voiceBtn').classList.remove('recording');
+                    document.getElementById('voiceVisualizer').classList.remove('active');
+                    document.getElementById('aiStatus').textContent = 'AI CORE ACTIVE';
+                    this.recognition.stop();
+                }
+            }
+
+            async sendMessage() {
+                const input = document.getElementById('commandInput');
+                const message = input.value.trim();
+                
+                if (!message) return;
+
+                this.addMessage(message, 'user');
+                input.value = '';
+                
+                document.getElementById('aiStatus').textContent = 'PROCESSING...';
+                
+                // Show thinking indicator
+                this.showThinking();
+
+                // Process command
+                const response = await this.processCommand(message);
+                
+                this.removeThinking();
+                this.addMessage(response, 'assistant');
+                this.speak(response);
+                
+                document.getElementById('aiStatus').textContent = 'AI CORE ACTIVE';
+            }
+
+            async processCommand(command) {
+                const lowerCommand = command.toLowerCase();
+
+                // System commands (work offline)
+                if (lowerCommand.includes('shutdown') || lowerCommand.includes('shut down')) {
+                    return this.systemControl('shutdown');
+                }
+                if (lowerCommand.includes('restart') || lowerCommand.includes('reboot')) {
+                    return this.systemControl('restart');
+                }
+                if (lowerCommand.includes('sleep')) {
+                    return this.systemControl('sleep');
+                }
+                if (lowerCommand.includes('lock')) {
+                    return this.systemControl('lock');
+                }
+
+                // Time and date
+                if (lowerCommand.includes('time')) {
+                    return this.executeCommand('time');
+                }
+                if (lowerCommand.includes('date')) {
+                    return this.executeCommand('date');
+                }
+
+                // Music controls
+                if (lowerCommand.includes('play music') || lowerCommand.includes('start music')) {
+                    return this.musicControl('play');
+                }
+                if (lowerCommand.includes('stop music') || lowerCommand.includes('pause music')) {
+                    return this.musicControl('pause');
+                }
+                if (lowerCommand.includes('next song') || lowerCommand.includes('next track')) {
+                    return this.musicControl('next');
+                }
+                if (lowerCommand.includes('previous song') || lowerCommand.includes('previous track')) {
+                    return this.musicControl('prev');
+                }
+
+                // Open applications
+                if (lowerCommand.includes('open chrome') || lowerCommand.includes('launch chrome')) {
+                    return this.openApp('chrome');
+                }
+                if (lowerCommand.includes('open spotify')) {
+                    return this.openApp('spotify');
+                }
+                if (lowerCommand.includes('open youtube')) {
+                    return this.openApp('youtube');
+                }
+                if (lowerCommand.includes('open vs code') || lowerCommand.includes('open vscode')) {
+                    return this.openApp('vscode');
+                }
+                if (lowerCommand.includes('open explorer') || lowerCommand.includes('file manager')) {
+                    return this.openApp('explorer');
+                }
+                if (lowerCommand.includes('open terminal') || lowerCommand.includes('command prompt')) {
+                    return this.openApp('terminal');
+                }
+                if (lowerCommand.includes('open settings')) {
+                    return this.openApp('settings');
+                }
+                if (lowerCommand.includes('open notepad') || lowerCommand.includes('open notes')) {
+                    return this.openApp('notepad');
+                }
+
+                // Calculations
+                if (lowerCommand.includes('calculate') || lowerCommand.includes('what is')) {
+                    return this.calculate(command);
+                }
+
+                // Web search
+                if (lowerCommand.includes('search for') || lowerCommand.includes('google')) {
+                    return this.webSearch(command);
+                }
+
+                // Weather
+                if (lowerCommand.includes('weather')) {
+                    return this.executeCommand('weather');
+                }
+
+                // Try online AI if available
+                if (this.isOnline) {
+                    return await this.getOnlineAIResponse(command);
+                } else {
+                    return this.getOfflineResponse(command);
+                }
+            }
+
+            async getOnlineAIResponse(message) {
+                try {
+                    const response = await fetch('https://api.anthropic.com/v1/messages', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            model: 'claude-sonnet-4-20250514',
+                            max_tokens: 500,
+                            messages: [{
+                                role: 'user',
+                                content: `You are JARVIS, an advanced AI assistant. Respond concisely and helpfully to: ${message}`
+                            }]
+                        })
+                    });
+
+                    const data = await response.json();
+                    if (data.content && data.content[0] && data.content[0].text) {
+                        return data.content[0].text;
+                    }
+                } catch (error) {
+                    console.log('API unavailable, using offline mode');
+                }
+                
+                return this.getOfflineResponse(message);
+            }
+
+            getOfflineResponse(message) {
+                const lowerMessage = message.toLowerCase();
+                
+                if (lowerMessage.match(/hello|hi|hey|greetings/)) {
+                    return this.offlineResponses.greetings[Math.floor(Math.random() * this.offlineResponses.greetings.length)];
+                }
+                
+                if (lowerMessage.includes('help') || lowerMessage.includes('what can you do')) {
+                    return this.offlineResponses.help[0];
+                }
+
+                return this.offlineResponses.default[Math.floor(Math.random() * this.offlineResponses.default.length)];
+            }
+
+            executeCommand(cmd) {
+                switch(cmd) {
+                    case 'time':
+                        const now = new Date();
+                        const time = now.toLocaleTimeString('en-US');
+                        return `The current time is ${time}.`;
+                    
+                    case 'date':
+                        const date = new Date().toLocaleDateString('en-US', { 
+                            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
+                        });
+                        return `Today is ${date}.`;
+                    
+                    case 'weather':
+                        return `I would need access to a weather API to provide current conditions. Would you like me to open a weather website?`;
+                    
+                    case 'search google':
+                        window.open('https://www.google.com', '_blank');
+                        return 'Opening Google search.';
+                    
+                    case 'play music':
+                        return this.musicControl('play');
+                    
+                    case 'youtube':
+                        window.open('https://www.youtube.com', '_blank');
+                        return 'Opening YouTube.';
+                    
+                    case 'calculator':
+                        return 'I can perform calculations for you. Just ask me to calculate any expression.';
+                    
+                    case 'notepad':
+                        return this.openApp('notepad');
+                    
+                    default:
+                        return 'Command executed.';
+                }
+            }
+
+            systemControl(action) {
+                // Note: Browser-based web apps cannot directly control system power
+                // These would require native desktop integration
+                
+                const messages = {
+                    'shutdown': 'System shutdown command received. Note: Browser apps cannot directly shutdown your computer. You would need to use your operating system\'s shutdown command or a native desktop application.',
+                    'restart': 'System restart command received. Note: Browser apps cannot directly restart your computer. Please use your operating system\'s restart command.',
+                    'sleep': 'Sleep mode command received. Note: Browser apps have limited system control. Please use your operating system\'s sleep command.',
+                    'lock': 'Lock screen command received. On Windows, press Win+L. On Mac, press Cmd+Ctrl+Q.'
+                };
+
+                this.notify(messages[action], 'warning');
+                return messages[action];
+            }
+
+            openApp(appName) {
+                const apps = {
+                    'chrome': { url: 'https://www.google.com', name: 'Google Chrome' },
+                    'spotify': { url: 'https://open.spotify.com', name: 'Spotify' },
+                    'youtube': { url: 'https://www.youtube.com', name: 'YouTube' },
+                    'vscode': { url: 'https://vscode.dev', name: 'VS Code Web' },
+                    'explorer': { url: '', name: 'File Explorer (requires system access)' },
+                    'terminal': { url: '', name: 'Terminal (requires system access)' },
+                    'settings': { url: '', name: 'System Settings (requires system access)' },
+                    'notepad': { url: 'https://notepad-online.com', name: 'Online Notepad' }
+                };
+
+                if (apps[appName].url) {
+                    window.open(apps[appName].url, '_blank');
+                    this.notify(`Opening ${apps[appName].name}`, 'success');
+                    return `Opening ${apps[appName].name}.`;
+                } else {
+                    return `${apps[appName].name} cannot be opened from browser. Please use your operating system's native launcher.`;
+                }
+            }
+
+            musicControl(action) {
+                const responses = {
+                    'play': () => {
+                        if (!this.musicPlaying) {
+                            this.musicPlaying = true;
+                            document.getElementById('playBtn').textContent = '⏸️';
+                            document.getElementById('trackInfo').textContent = '🎵 Music Playing';
+                            this.notify('Music playback started', 'success');
+                            // Open Spotify or YouTube Music
+                            window.open('https://open.spotify.com', '_blank');
+                            return 'Starting music playback. Opening Spotify.';
+                        } else {
+                            this.musicPlaying = false;
+                            document.getElementById('playBtn').textContent = '▶️';
+                            document.getElementById('trackInfo').textContent = 'Music Paused';
+                            return 'Music paused.';
+                        }
+                    },
+                    'pause': () => {
+                        this.musicPlaying = false;
+                        document.getElementById('playBtn').textContent = '▶️';
+                        document.getElementById('trackInfo').textContent = 'Music Paused';
+                        return 'Music paused.';
+                    },
+                    'next': () => {
+                        this.notify('Next track', 'success');
+                        return 'Playing next track.';
+                    },
+                    'prev': () => {
+                        this.notify('Previous track', 'success');
+                        return 'Playing previous track.';
+                    }
+                };
+
+                return responses[action] ? responses[action]() : 'Music control action completed.';
+            }
+
+            calculate(message) {
+                try {
+                    const match = message.match(/(?:calculate|what is)\s+(.+)/i);
+                    if (match) {
+                        const expr = match[1].replace(/[^0-9+\-*/().]/g, '');
+                        const result = eval(expr);
+                        return `The result is ${result}.`;
+                    }
+                } catch (error) {
+                    return 'Invalid calculation. Please provide a valid mathematical expression.';
+                }
+                return 'Please specify what to calculate.';
+            }
+
+            webSearch(query) {
+                const searchTerm = query.replace(/search for|google|look up/gi, '').trim();
+                if (searchTerm) {
+                    window.open(`https://www.google.com/search?q=${encodeURIComponent(searchTerm)}`, '_blank');
+                    return `Searching for "${searchTerm}" on Google.`;
+                }
+                return 'Please specify what to search for.';
+            }
+
+            addMessage(text, sender) {
+                const chatDisplay = document.getElementById('chatDisplay');
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `chat-message message-${sender}`;
+                
+                const bubble = document.createElement('div');
+                bubble.className = 'message-bubble';
+                bubble.textContent = text;
+                
+                const time = document.createElement('div');
+                time.className = 'message-time';
+                time.textContent = new Date().toLocaleTimeString('en-US', { 
+                    hour: '2-digit', minute: '2-digit' 
+                });
+                
+                messageDiv.appendChild(bubble);
+                messageDiv.appendChild(time);
+                chatDisplay.appendChild(messageDiv);
+                
+                chatDisplay.scrollTop = chatDisplay.scrollHeight;
+            }
+
+            showThinking() {
+                const chatDisplay = document.getElementById('chatDisplay');
+                const thinkingDiv = document.createElement('div');
+                thinkingDiv.id = 'thinkingIndicator';
+                thinkingDiv.className = 'chat-message message-assistant';
+                thinkingDiv.innerHTML = `
+                    <div class="message-bubble">
+                        <div class="thinking">
+                            <div class="thinking-dot"></div>
+                            <div class="thinking-dot"></div>
+                            <div class="thinking-dot"></div>
+                        </div>
+                    </div>
+                `;
+                chatDisplay.appendChild(thinkingDiv);
+                chatDisplay.scrollTop = chatDisplay.scrollHeight;
+            }
+
+            removeThinking() {
+                const thinking = document.getElementById('thinkingIndicator');
+                if (thinking) thinking.remove();
+            }
+
+            speak(text) {
+                if (this.synthesis) {
+                    this.synthesis.cancel();
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.rate = 1.0;
+                    utterance.pitch = 1.0;
+                    utterance.volume = 1.0;
+                    this.synthesis.speak(utterance);
+                }
+            }
+
+            updateTime() {
+                const now = new Date();
+                document.getElementById('timeDisplay').textContent = 
+                    now.toLocaleTimeString('en-US', { hour12: false });
+                document.getElementById('dateDisplay').textContent = 
+                    now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            }
+
+            checkOnlineStatus() {
+                this.updateOnlineStatus(navigator.onLine);
+            }
+
+            updateOnlineStatus(online) {
+                this.isOnline = online;
+                const offlineBadge = document.getElementById('offlineBadge');
+                const modeStatus = document.getElementById('modeStatus');
+                
+                if (online) {
+                    offlineBadge.style.display = 'none';
+                    modeStatus.textContent = 'ONLINE';
+                    modeStatus.style.color = 'var(--success)';
+                } else {
+                    offlineBadge.style.display = 'inline-block';
+                    modeStatus.textContent = 'OFFLINE';
+                    modeStatus.style.color = 'var(--warning)';
+                }
+            }
+
+            notify(message, type = 'success') {
+                const notification = document.createElement('div');
+                notification.className = 'notification';
+                notification.textContent = message;
+                
+                if (type === 'warning') {
+                    notification.style.borderColor = 'var(--warning)';
+                    notification.style.color = 'var(--warning)';
+                } else if (type === 'danger') {
+                    notification.style.borderColor = 'var(--danger)';
+                    notification.style.color = 'var(--danger)';
+                }
+                
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.style.animation = 'slideInRight 0.3s ease-out reverse';
+                    setTimeout(() => notification.remove(), 300);
+                }, 3000);
+            }
+        }
+
+        // Initialize JARVIS
+        let jarvis;
+        document.addEventListener('DOMContentLoaded', () => {
+            jarvis = new JarvisAdvanced();
+        });
+    </script>
+</body>
+</html>
